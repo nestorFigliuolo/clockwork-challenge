@@ -18,20 +18,44 @@ export async function initMovieService () {
   console.log(configuration)
 }
 
-export async function getMovieDiscover (page) {
+export async function getMovieDiscover (page, rawFilters) {
+  const params = { page }
+  if (rawFilters.stars) {
+    params['vote_average.gte'] = (rawFilters.stars * 2) - 2
+    params['vote_average.lte'] = (rawFilters.stars * 2)
+  }
   try {
-    const response = await client.get('/discover/movie', {
-      params: { page }
-    })
-    return response.data
+    const data = (await client.get('/discover/movie', {
+      params
+    })).data
+    if (!configuration) {
+      await initMovieService()
+    }
+    for (const movie of data.results) {
+      movie.backdrop_path = await getBackdropPath(movie.backdrop_path)
+      movie.poster_path = await getPosterPath(movie.poster_path)
+    }
+    console.log(data)
+    return data
   } catch (err) {
     console.log(err)
   }
 }
 
-export async function getImageUrl (imagePath) {
-  if (!configuration) {
-    await initMovieService()
+function getPosterPath (imagePath) {
+  return `${configuration.images.secure_base_url}original${imagePath}?api_key=${apiKey}`
+}
+
+function getBackdropPath (imagePath) {
+  return `${configuration.images.secure_base_url}original${imagePath}?api_key=${apiKey}`
+}
+
+export async function getGenres () {
+  try {
+    const genres = (await client.get('/genre/movie/list')).data.genres
+    console.log(genres)
+    return genres
+  } catch (err) {
+    console.log(err)
   }
-  return `${configuration.images.secure_base_url}${configuration.images.poster_sizes[3]}${imagePath}?api_key=${apiKey}`
 }
