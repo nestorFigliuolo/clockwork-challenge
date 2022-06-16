@@ -19,10 +19,21 @@ export async function initMovieService () {
 }
 
 export async function getMovieDiscover (page, rawFilters) {
+  console.log(rawFilters)
   const params = { page }
   if (rawFilters.stars) {
     params['vote_average.gte'] = (rawFilters.stars * 2) - 2
     params['vote_average.lte'] = (rawFilters.stars * 2)
+  }
+  if (rawFilters.genres) {
+    params.with_genres = rawFilters.genres.reduce((str, genre) => {
+      return `${genre},${str}`
+    }, '')
+  }
+  if (rawFilters.searchStr) {
+    params.with_keywords = rawFilters.searchStr.split(' ').reduce((str, keyword) => {
+      return `${keyword},${str}`
+    }, '')
   }
   try {
     const data = (await client.get('/discover/movie', {

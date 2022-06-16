@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 import Discover from './components/discover/Discover'
 import GenreFilter from './components/filters/GenreFilter'
+import SearchBar from './components/filters/SearchBar'
 import StarFilter from './components/filters/StarFilter'
 import SelectedMovie from './components/movie/SelectedMovie'
 import { getMovieDiscover, init, initMovieService } from './services/MovieService'
@@ -33,11 +34,16 @@ function App () {
     setFilters({ ...filters, genres })
   }
 
+  const setSearchFilter = (searchStr) => {
+    setFilters({ ...filters, searchStr })
+  }
+
   return (
     <div className="App">
       <SelectedMovie movie={selectdMovie} />
       <StarFilter setStarsFilter={setStarsFilter}/>
-      <GenreFilter setGenresFilter={setFilters}/>
+      <GenreFilter setGenresFilter={setGenresFilter}/>
+      <SearchBar setSearchFilter={setSearchFilter}/>
       <Discover movies={movies} setSelectedMovie={setSelectedMovie}/>
       <button type="button" onClick={() => setMoviesPage(moviesPage + 1)} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Next</button>
       <button type="button" onClick={() => setMoviesPage(moviesPage - 1)} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Prev</button>
