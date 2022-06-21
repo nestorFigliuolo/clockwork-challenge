@@ -30,7 +30,7 @@ function StarFilter (props) {
     const stars = []
     for (let i = 1; i <= MAX_STARS; i++) {
       stars.push(<img
-        className='star'
+        className='star m-1'
         key={i}
         src={(i <= limit) ? '/star-selected.svg' : '/star-unselected.svg'}
         onMouseEnter={() => onHoverStar(i)}
@@ -42,8 +42,11 @@ function StarFilter (props) {
   }
 
   return (
-    <div className='flex flex-row'>
-      {genStars()}
+    <div className='filterContainer flex flex-col justify-start space-y-4 p-5'>
+      <p className='starFilterTitle text-left'>Rating</p>
+      <div className='flex flex-row '>
+        {genStars()}
+      </div>
     </div>
   )
 }

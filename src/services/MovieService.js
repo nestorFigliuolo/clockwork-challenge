@@ -14,43 +14,67 @@ let configuration
 
 export async function initMovieService () {
   const response = await client.get('/configuration')
+  const genres = await getGenres()
+
   configuration = response.data
-  console.log(configuration)
+  configuration.genres = genres
 }
 
 export async function getMovieDiscover (page, rawFilters) {
-  console.log(rawFilters)
-  const params = { page }
-  if (rawFilters.stars) {
-    params['vote_average.gte'] = (rawFilters.stars * 2) - 2
-    params['vote_average.lte'] = (rawFilters.stars * 2)
-  }
-  if (rawFilters.genres) {
-    params.with_genres = rawFilters.genres.reduce((str, genre) => {
-      return `${genre},${str}`
-    }, '')
-  }
-  if (rawFilters.searchStr) {
-    params.with_keywords = rawFilters.searchStr.split(' ').reduce((str, keyword) => {
-      return `${keyword},${str}`
-    }, '')
-  }
   try {
-    const data = (await client.get('/discover/movie', {
-      params
-    })).data
-    if (!configuration) {
-      await initMovieService()
+    const params = { page }
+
+    if (rawFilters.stars) {
+      params['vote_average.gte'] = (rawFilters.stars * 2) - 2
+      params['vote_average.lte'] = (rawFilters.stars * 2)
     }
-    for (const movie of data.results) {
-      movie.backdrop_path = await getBackdropPath(movie.backdrop_path)
-      movie.poster_path = await getPosterPath(movie.poster_path)
+    if (rawFilters.genres) {
+      params.with_genres = rawFilters.genres.reduce((str, genre) => {
+        return `${genre},${str}`
+      }, '')
     }
-    console.log(data)
+
+    return await fetchMovies('/discover/movie', params)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function searchMovies (page, searchStr) {
+  try {
+    const params = { page, query: encodeURI(searchStr) }
+    const data = await fetchMovies('/search/movie', params)
     return data
   } catch (err) {
     console.log(err)
   }
+}
+
+async function fetchMovies (url, params) {
+  try {
+    const movies = (await client.get(url, {
+      params
+    })).data.results
+    if (!configuration) {
+      await initMovieService()
+    }
+
+    for (const movie of movies) {
+      movie.backdrop_path = getBackdropPath(movie.backdrop_path)
+      movie.poster_path = getPosterPath(movie.poster_path)
+      movie.genres = configuration.genres.filter(genre => { return movie.genre_ids.indexOf(genre.id) !== -1 }).map(genre => genre.name)
+    }
+    const promiseArr = []
+    movies.forEach(movie => promiseArr.push(appendDetailsToMovie(movie)))
+    return Promise.all(promiseArr)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+async function appendDetailsToMovie (movie) {
+  const details = (await client.get(`/movie/${movie.id}`)).data
+  return { ...details, ...movie }
 }
 
 function getPosterPath (imagePath) {
@@ -64,7 +88,6 @@ function getBackdropPath (imagePath) {
 export async function getGenres () {
   try {
     const genres = (await client.get('/genre/movie/list')).data.genres
-    console.log(genres)
     return genres
   } catch (err) {
     console.log(err)

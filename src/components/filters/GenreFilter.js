@@ -13,9 +13,9 @@ function GenreFilter (props) {
     initGenres()
   }, [])
 
-  const onGenreChange = (isChecked, genreId) => {
+  const onGenreChange = (genreId) => {
     const newSelectedGenres = [...selectedGenres]
-    if (isChecked) {
+    if (!newSelectedGenres.includes(genreId)) {
       newSelectedGenres.push(genreId)
     } else {
       newSelectedGenres.splice(newSelectedGenres.indexOf(genreId), 1)
@@ -25,13 +25,20 @@ function GenreFilter (props) {
   }
 
   return (
-    <div>
-      {genres.map((genre, index) => {
-        return <label key={index}>
-          <input type='checkbox' value={selectedGenres.indexOf(genre.id) !== -1} onChange={(event) => onGenreChange(event.target.checked, genre.id)}/>
-          {genre.name}
-        </label>
-      })}
+    <div className='filterContainer p-8'>
+      <p className='genreFilterTitle text-left '>Category</p>
+      <div className='grid grid-cols-2 gap-4'>
+        {genres.map((genre, index) => {
+          return (
+            <label className='genreFilterLabel flex flex-row gap-4' key={index}>
+              <div onClick={() => onGenreChange(genre.id)}>
+                <img src={(selectedGenres.indexOf(genre.id) !== -1) ? '/genre-checked.svg' : '/genre-unchecked.svg'} />
+              </div>
+              {genre.name}
+            </label>
+          )
+        })}
+      </div>
     </div>
   )
 }

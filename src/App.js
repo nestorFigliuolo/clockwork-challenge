@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import './App.css'
-import Discover from './components/discover/Discover'
-import GenreFilter from './components/filters/GenreFilter'
-import SearchBar from './components/filters/SearchBar'
-import StarFilter from './components/filters/StarFilter'
+import './App.scss'
+import Discover from './components/lists/Discover'
+import SearchBar from './components/searchBar/SearchBar'
 import SelectedMovie from './components/movie/SelectedMovie'
-import { getMovieDiscover, init, initMovieService } from './services/MovieService'
+import { getMovieDiscover, initMovieService, searchMovies } from './services/MovieService'
+import MyList from './components/lists/MyList'
+import FiltersContainers from './components/filters/FiltersContainer'
+import MovieDetail from './components/movie/MovieDetail'
 
 function App () {
+  const [myMovies, setMyMovies] = useState([])
   const [movies, setMovies] = useState([])
   const [selectdMovie, setSelectedMovie] = useState({})
+  const [showDetails, setShowDetails] = useState(false)
   const [moviesPage, setMoviesPage] = useState(1)
   const [filters, setFilters] = useState({})
+  const [searchString, setSearchString] = useState('')
+  const [enabledFilters, setEnabledFilters] = useState(true)
 
   useEffect(() => {
     initMovieService()
@@ -20,33 +25,73 @@ function App () {
   useEffect(() => {
     const getData = async () => {
       const data = await getMovieDiscover(moviesPage, filters)
-      setSelectedMovie(data.results[0])
-      setMovies(data.results)
+      setSelectedMovie(data[0])
+      setMovies(data)
     }
     getData()
   }, [moviesPage, filters])
 
+  useEffect(() => {
+    if (searchString !== '') {
+      setEnabledFilters(false)
+    } else {
+      setEnabledFilters(true)
+    }
+  }, [searchString])
+
   const setStarsFilter = (number) => {
-    setFilters({ ...filters, stars: number })
+    const newFilters = { ...filters }
+    newFilters.stars = number
+    setFilters(newFilters)
   }
 
   const setGenresFilter = (genres) => {
-    setFilters({ ...filters, genres })
+    const newFilters = { ...filters }
+    newFilters.genres = genres
+    setFilters(newFilters)
   }
 
-  const setSearchFilter = (searchStr) => {
-    setFilters({ ...filters, searchStr })
+  const search = async () => {
+    setMovies(await searchMovies(moviesPage, searchString))
+  }
+
+  const addToFavourites = (movie) => {
+    setMyMovies([...myMovies, movie])
+  }
+
+  const closeDetail = () => {
+    setShowDetails(false)
+  }
+
+  const openDetail = (movie) => {
+    setSelectedMovie(movie)
+    setShowDetails(true)
   }
 
   return (
     <div className="App">
-      <SelectedMovie movie={selectdMovie} />
-      <StarFilter setStarsFilter={setStarsFilter}/>
-      <GenreFilter setGenresFilter={setGenresFilter}/>
-      <SearchBar setSearchFilter={setSearchFilter}/>
-      <Discover movies={movies} setSelectedMovie={setSelectedMovie}/>
-      <button type="button" onClick={() => setMoviesPage(moviesPage + 1)} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Next</button>
-      <button type="button" onClick={() => setMoviesPage(moviesPage - 1)} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Prev</button>
+          <SelectedMovie movie={selectdMovie} closeDetail={closeDetail} />
+
+          { !showDetails &&
+          <div className='grid grid-cols-5 gap-4'>
+            <FiltersContainers
+              setGenresFilter={setGenresFilter}
+              setStarsFilter={setStarsFilter}
+              enabledFilters={enabledFilters}
+            />
+            <div className='grow col-span-4'>
+              <SearchBar onSearch={search} searchString={searchString} setSearchString={setSearchString}/>
+              <MyList myMovies={myMovies} openDetail={openDetail}/>
+              <Discover movies={movies} addToFavourites={addToFavourites} openDetail={openDetail}/>
+              <button type="button" onClick={() => setMoviesPage(moviesPage + 1)} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Next</button>
+              <button type="button" onClick={() => setMoviesPage(moviesPage - 1)} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Prev</button>
+            </div>
+          </div>
+          }
+          {
+            showDetails &&
+            <MovieDetail selectedMovie={selectdMovie} />
+          }
     </div>
   )
 }
