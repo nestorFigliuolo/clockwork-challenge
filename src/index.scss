@@ -87,7 +87,7 @@ body {
   font-size: 24px;
 }
 
-/* Discover */ 
+/* Discover */
 .discoverTitle {
   font-family: 'Poppins SemiBold', sans-serif;
   font-size: 24px;
@@ -121,7 +121,7 @@ body {
 }
 
 .movieTitle {
-  font-family: 'Poppins SemiBold', sans-serif;  
+  font-family: 'Poppins SemiBold', sans-serif;
   text-overflow: ellipsis;
 }
 
@@ -129,6 +129,25 @@ body {
   font-family: 'Poppins Regular', sans-serif;
   opacity: 0.6;
 }
+
+.movieButtonsContainer {
+  margin-bottom: -50%;
+}
+
+.moviePlayButton {
+  background: #192AC4;
+  border-radius: 20px;
+  width: 66px;
+  height: 62px;
+}
+
+.movieAddToListButton {
+  background: #FFFFFF;
+  border-radius: 20px;
+  width: 66px;
+  height: 62px;
+}
+
 
 /* Filters */
 .filterContainer {
@@ -202,4 +221,3 @@ body {
 .searcBarIcon {
   margin-left: -48px;
 }
-

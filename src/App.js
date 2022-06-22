@@ -56,7 +56,9 @@ function App () {
   }
 
   const addToFavourites = (movie) => {
-    setMyMovies([...myMovies, movie])
+    if (myMovies.map(movie => movie.id).indexOf(movie.id) === -1) {
+      setMyMovies([...myMovies, movie])
+    }
   }
 
   const closeDetail = () => {
