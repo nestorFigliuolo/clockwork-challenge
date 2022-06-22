@@ -4,8 +4,8 @@ import Movie from '../movie/Movie'
 
 function MyList (props) {
   return (
-    <div>
-      <h1>My List</h1>
+    <div className={`${props.myMovies.length === 0 ? 'hidden' : ''}`}>
+      <p className='myListTitle text-left mt-6 mb-6'>My List</p>
       <div className='grid grid-cols-4 gap-4'>
       {
         props.myMovies.map((movie, index) => {

@@ -25,7 +25,7 @@ function GenreFilter (props) {
   }
 
   return (
-    <div className='filterContainer p-8'>
+    <div className='filterContainerBubble p-8'>
       <p className='genreFilterTitle text-left '>Category</p>
       <div className='grid grid-cols-2 gap-4'>
         {genres.map((genre, index) => {

@@ -71,27 +71,40 @@ function App () {
   return (
     <div className="App">
           <SelectedMovie movie={selectdMovie} closeDetail={closeDetail} />
+          <div className='moviesContainer'>
+            {
+              !showDetails &&
+              <div className='grid grid-cols-4 gap-6 '>
+                <FiltersContainers className='flex-none'
+                  setGenresFilter={setGenresFilter}
+                  setStarsFilter={setStarsFilter}
+                  enabledFilters={enabledFilters}
+                />
+                <div className='col-span-3'>
+                  <SearchBar onSearch={search} searchString={searchString} setSearchString={setSearchString}/>
+                  <MyList myMovies={myMovies} openDetail={openDetail}/>
+                  <Discover movies={movies} addToFavourites={addToFavourites} openDetail={openDetail}/>
+                  <div className='flex flex-row justify-end gap-4 mt-16 mb-16'>
+                    <button
+                      type="button"
+                      className={`pageButton ${(moviesPage === 1) ? 'pageButtonDisabled' : ''} flex flex-row justify-center items-center gap-4`}
+                      disabled={moviesPage === 1}
+                      onClick={() => setMoviesPage(moviesPage - 1)}
+                    >
+                      <img src='/chevron-left.svg' /> Previous
+                    </button>
+                    <button type="button" onClick={() => setMoviesPage(moviesPage + 1)} className='pageButton flex flex-row justify-center items-center gap-4'>Next <img src='/chevron-right.svg' /></button>
+                  </div>
 
-          { !showDetails &&
-          <div className='grid grid-cols-5 gap-4'>
-            <FiltersContainers
-              setGenresFilter={setGenresFilter}
-              setStarsFilter={setStarsFilter}
-              enabledFilters={enabledFilters}
-            />
-            <div className='grow col-span-4'>
-              <SearchBar onSearch={search} searchString={searchString} setSearchString={setSearchString}/>
-              <MyList myMovies={myMovies} openDetail={openDetail}/>
-              <Discover movies={movies} addToFavourites={addToFavourites} openDetail={openDetail}/>
-              <button type="button" onClick={() => setMoviesPage(moviesPage + 1)} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Next</button>
-              <button type="button" onClick={() => setMoviesPage(moviesPage - 1)} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Prev</button>
-            </div>
+                </div>
+              </div>
+            }
+            {
+              showDetails &&
+              <MovieDetail selectedMovie={selectdMovie} />
+            }
           </div>
-          }
-          {
-            showDetails &&
-            <MovieDetail selectedMovie={selectdMovie} />
-          }
+
     </div>
   )
 }

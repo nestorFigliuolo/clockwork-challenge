@@ -7,7 +7,6 @@ function showFilters (props, enabledFilters) {
   if (enabledFilters) {
     return (
       <div className='flex flex-col gap-4'>
-        <p className='genreFilterTitle'>Filter by</p>
         <StarFilter setStarsFilter={props.setStarsFilter}/>
         <GenreFilter search={props.search} setGenresFilter={props.setGenresFilter}/>
       </div>
@@ -18,6 +17,10 @@ function showFilters (props, enabledFilters) {
 function FiltersContainers (props) {
   return (
     <div>
+      <div className={`${(!props.enabledFilters) ? 'filterContainerDisabled' : ''} flex flex-row gap-4`}>
+        <img src={(props.enabledFilters) ? '/filters-enabled.svg' : '/filters-disabled.svg'} />
+        <p className='filterContainerTitle text-left'>Filter by</p>
+      </div>
       {showFilters(props, props.enabledFilters)}
     </div>
   )

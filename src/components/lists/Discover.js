@@ -5,7 +5,7 @@ import Movie from '../movie/Movie'
 function Discover (props) {
   return (
     <div>
-      <h1>Discover</h1>
+      <p className='discoverTitle text-left mt-6 mb-6'>Discover</p>
       <div className='grid grid-cols-4 gap-4'>
           {
           props.movies.map((movie, index) => {

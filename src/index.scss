@@ -36,6 +36,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.moviesContainer {
+  margin: 80px 150px 0px 150px;
+}
 
 
 /* SelectedMovie */
@@ -78,10 +81,39 @@ body {
   filter: drop-shadow(0px 7px 42px rgba(0, 15, 147, 0.44));
 }
 
+/* My list */
+.myListTitle {
+  font-family: 'Poppins SemiBold', sans-serif;
+  font-size: 24px;
+}
+
+/* Discover */ 
+.discoverTitle {
+  font-family: 'Poppins SemiBold', sans-serif;
+  font-size: 24px;
+}
+
+/* Page buttons */
+.pageButton {
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  width: 162px;
+  height: 53px;
+}
+
+.pageButtonDisabled {
+  opacity: 0.4;
+}
+
 /* Movie card */
 .movieContainer {
   background: #131313;
   border-radius: 20px;
+}
+
+.movieCategory {
+  background: $accent-color;
+  border-radius: 0px 0px 11px 11px;
 }
 
 .moviePoster {
@@ -99,15 +131,29 @@ body {
 }
 
 /* Filters */
-
 .filterContainer {
+  width: 400px;
+  max-width: 400px;
+}
+
+.filterContainerBubble {
   background: #151515;
   border-radius: 20px;
+}
+
+.filterContainerTitle {
+  font-family: 'Poppins SemiBold', sans-serif;
+  font-size: 24px;
+}
+
+.filterContainerDisabled {
+  opacity: 0.4;
 }
 
 /* Star Filter */
 .starFilterTitle {
   font-family: 'Poppins SemiBold', sans-serif;
+  font-size: 20px;
 }
 
 .star {
@@ -119,10 +165,41 @@ body {
 /* Genre Filter */
 .genreFilterTitle {
   font-family: 'Poppins SemiBold', sans-serif;
+  font-size: 20px;
 }
 
 .genreFilterLabel {
   font-family: 'Poppins Regular', sans-serif;
+  font-size: 16px;
 }
 
+.genreFilterLabelDisabled {
+  opacity: 0.5;
+}
+
+/* Search bar */
+.searchBarInput {
+  font-family: 'Poppins Regular', sans-serif;
+  font-size: 16px;
+  border-radius: 20px;
+}
+
+.searchBarInput:focus {
+  outline: none;
+}
+
+.searchBarInputEmpty {
+  background: #424242;
+  border: 1px solid #7C7C7C;
+}
+
+.searchBarInputWithText {
+  background: #FFFFFF;
+  border: 1px solid #192AC4;
+  color: #000000;
+}
+
+.searcBarIcon {
+  margin-left: -48px;
+}
 
