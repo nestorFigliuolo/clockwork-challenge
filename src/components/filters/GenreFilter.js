@@ -26,12 +26,12 @@ function GenreFilter (props) {
 
   return (
     <div className='filterContainerBubble p-8'>
-      <p className='genreFilterTitle text-left '>Category</p>
-      <div className='grid grid-cols-2 gap-4'>
+      <p className='genreFilterTitle text-left pb-6'>Category</p>
+      <div className='flex flex-col lg:grid lg:grid-cols-2 gap-4'>
         {genres.map((genre, index) => {
           return (
             <label className='genreFilterLabel flex flex-row gap-4' key={index}>
-              <div onClick={() => onGenreChange(genre.id)}>
+              <div className='h-full min-h-full' onClick={() => onGenreChange(genre.id)}>
                 <img src={(selectedGenres.indexOf(genre.id) !== -1) ? '/genre-checked.svg' : '/genre-unchecked.svg'} />
               </div>
               {genre.name}

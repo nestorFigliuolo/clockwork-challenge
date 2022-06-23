@@ -40,15 +40,28 @@ body {
   margin: 80px 150px 0px 150px;
 }
 
+@media only screen and (min-width: 992px) {
+  .mainGrid {
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-gap: 2rem;
+  }
+}
 
-/* SelectedMovie */
+
+/* Selected Movie */
 .selectedMovieBackground {
   width: 100%;
-  height: 495px;
   object-fit: cover;
   left: calc(50% - 1921px/2 + 0.5px);
   top: 0px;
   background: linear-gradient(90deg, #070707 13.01%, rgba(0, 0, 0, 0.69) 75.59%);
+}
+
+.selectedMovieDetailMiniPoster {
+  width: 170px;
+  max-width: 170px;
 }
 
 .selectedMovieInfo {
@@ -68,6 +81,7 @@ body {
 .selectedMovieButton {
   box-shadow: 0px 7px 42px rgba(0, 15, 147, 0.44);
   border-radius: 20px;
+  width: 260px;
 }
 
 .selectedMovieWatchNowButton {
@@ -109,6 +123,44 @@ body {
 .movieContainer {
   background: #131313;
   border-radius: 20px;
+  animation-duration: 0.5s;
+  animation-name: movieCardHoverOut;
+}
+
+@keyframes movieCardHoverOut {
+  from {
+    background: #2D2D2D;
+    width: 110%;
+    margin: -5%;
+  }
+  from {
+    width: 100%;
+    margin: 0%;
+    background: #131313;
+  }
+}
+
+.movieContainerHover {
+  border-radius: 20px;
+  width: 110%;
+  margin: -5%;
+  z-index: 2;
+  background: #2D2D2D;
+  box-shadow: 0px 33px 32px rgba(0, 0, 0, 0.81);
+  animation-duration: 0.5s;
+  animation-name: movieCardHover;
+}
+
+@keyframes movieCardHover {
+  from {
+    width: 100%;
+    margin: 0%;
+  }
+  to {
+    background: #2D2D2D;
+    width: 110%;
+    margin: -5%;
+  }
 }
 
 .movieCategory {
@@ -122,16 +174,18 @@ body {
 
 .movieTitle {
   font-family: 'Poppins SemiBold', sans-serif;
+  font-size: 20px;
   text-overflow: ellipsis;
 }
 
 .movieInfo {
   font-family: 'Poppins Regular', sans-serif;
+  font-size: 16px;
   opacity: 0.6;
 }
 
 .movieButtonsContainer {
-  margin-bottom: -50%;
+  margin-bottom: -48px;
 }
 
 .moviePlayButton {
@@ -146,6 +200,27 @@ body {
   border-radius: 20px;
   width: 66px;
   height: 62px;
+}
+
+/* Movie Details */
+.moviesDetailContainer {
+  margin: 0px 150px 0px 150px;
+}
+
+.movieDetailSimilarTitlesTitle {
+  font-family: 'Poppins SemiBold', sans-serif;
+  font-size: 35px;
+}
+
+.movieDetailBestRatedTitle {
+  font-family: 'Poppins SemiBold', sans-serif;
+  font-size: 35px;
+}
+
+/* Related Movie */ 
+.relatedMovieTitle {
+  font-family: 'Poppins SemiBold', sans-serif;
+  font-size: 20px;
 }
 
 

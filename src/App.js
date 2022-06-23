@@ -17,6 +17,7 @@ function App () {
   const [filters, setFilters] = useState({})
   const [searchString, setSearchString] = useState('')
   const [enabledFilters, setEnabledFilters] = useState(true)
+  const [searchedMovies, setSearchedMovies] = useState(false)
 
   useEffect(() => {
     initMovieService()
@@ -43,26 +44,27 @@ function App () {
     const newFilters = { ...filters }
     newFilters.stars = number
     setFilters(newFilters)
+    setSearchedMovies(false)
   }
 
   const setGenresFilter = (genres) => {
     const newFilters = { ...filters }
     newFilters.genres = genres
     setFilters(newFilters)
+    setSearchedMovies(false)
   }
 
   const search = async () => {
-    setMovies(await searchMovies(moviesPage, searchString))
+    if (searchString !== '') {
+      setSearchedMovies(true)
+      setMovies(await searchMovies(moviesPage, searchString))
+    }
   }
 
   const addToFavourites = (movie) => {
     if (myMovies.map(movie => movie.id).indexOf(movie.id) === -1) {
       setMyMovies([...myMovies, movie])
     }
-  }
-
-  const closeDetail = () => {
-    setShowDetails(false)
   }
 
   const openDetail = (movie) => {
@@ -72,21 +74,35 @@ function App () {
 
   return (
     <div className="App">
-          <SelectedMovie movie={selectdMovie} closeDetail={closeDetail} />
+          <SelectedMovie movie={selectdMovie} addToFavourites={addToFavourites} isShowingDetails={showDetails} />
           <div className='moviesContainer'>
+            {/* Usé rendering condicional en vez de algo mas extensible como rutas por una cuestion de tiempo, pero para una app de mayor escala esta solucion no es optima. */}
             {
               !showDetails &&
-              <div className='grid grid-cols-4 gap-6 '>
-                <FiltersContainers className='flex-none'
-                  setGenresFilter={setGenresFilter}
-                  setStarsFilter={setStarsFilter}
-                  enabledFilters={enabledFilters}
-                />
-                <div className='col-span-3'>
+              <div className=' mainGrid flex flex-col'>
+                <div className='lg:row-span-2'>
+                  <FiltersContainers className='flex-none'
+                    setGenresFilter={setGenresFilter}
+                    setStarsFilter={setStarsFilter}
+                    enabledFilters={enabledFilters}
+                  />
+                </div>
+
+                <div className='order-first mb-6 lg:mb-0 lg:col-span-3 lg:col-start-2 lg:row-start-1'>
                   <SearchBar onSearch={search} searchString={searchString} setSearchString={setSearchString}/>
-                  <MyList myMovies={myMovies} openDetail={openDetail}/>
-                  <Discover movies={movies} addToFavourites={addToFavourites} openDetail={openDetail}/>
-                  <div className='flex flex-row justify-end gap-4 mt-16 mb-16'>
+                </div>
+                <div className='lg:col-span-3 lg:col-start-2 lg:row-start-2'>
+                  <MyList
+                    myMovies={myMovies}
+                    openDetail={openDetail}
+                  />
+                  <Discover
+                    movies={movies}
+                    addToFavourites={addToFavourites}
+                    openDetail={openDetail}
+                    isSearching={searchedMovies}
+                  />
+                  <div className='flex flex-row justify-center lg:justify-end gap-4 mt-16 mb-16'>
                     <button
                       type="button"
                       className={`pageButton ${(moviesPage === 1) ? 'pageButtonDisabled' : ''} flex flex-row justify-center items-center gap-4`}

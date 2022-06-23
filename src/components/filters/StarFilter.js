@@ -42,7 +42,7 @@ function StarFilter (props) {
   }
 
   return (
-    <div className='filterContainerBubble flex flex-col justify-start space-y-4 p-5'>
+    <div className='filterContainerBubble flex flex-col justify-start space-y-4 p-8'>
       <p className='starFilterTitle text-left'>Rating</p>
       <div className='flex flex-row '>
         {genStars()}
